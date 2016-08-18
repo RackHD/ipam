@@ -1,5 +1,5 @@
 hash: e2dabaf1e451282bcc8632bacf0c02624d1a56deb9a0bd9c8122854174548738
-updated: 2016-08-18T16:01:21.372347828Z
+updated: 2016-08-18T17:15:25.722854231Z
 imports:
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
@@ -13,6 +13,5 @@ imports:
   - bson
   - internal/sasl
   - internal/scram
-- name: gopkg.in/mgo.v2/internal/json
-  version: 3f83fa5005286a7fe593b055f0d7771a7dce4655
+  - internal/json
 testImports: []

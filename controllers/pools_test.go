@@ -8,13 +8,13 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/gorilla/mux"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"github.com/RackHD/ipam/controllers"
 	"github.com/RackHD/ipam/controllers/helpers"
 	"github.com/RackHD/ipam/resources"
 	"github.com/RackHD/ipam/resources/factory"
+	"github.com/gorilla/mux"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Pools Controller", func() {

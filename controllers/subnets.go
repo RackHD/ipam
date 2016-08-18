@@ -6,11 +6,11 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/gorilla/mux"
 	"github.com/RackHD/ipam/controllers/helpers"
 	"github.com/RackHD/ipam/interfaces"
 	"github.com/RackHD/ipam/models"
 	"github.com/RackHD/ipam/resources"
+	"github.com/gorilla/mux"
 )
 
 // SubnetsController provides methods for handling requests to the Subnets API.
