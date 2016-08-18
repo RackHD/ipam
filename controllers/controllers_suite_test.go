@@ -4,9 +4,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/RackHD/ipam/models"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/RackHD/ipam/models"
 	"gopkg.in/mgo.v2/bson"
 
 	"testing"
@@ -102,4 +102,34 @@ func (mock *MockIpam) DeletePool(id string) error {
 	mock.Deleted = id
 
 	return mock.Err
+}
+
+// GetSubnets ...
+func (mock *MockIpam) GetSubnets() ([]models.Subnet, error) {
+	return []models.Subnet{}, nil
+}
+
+// GetSubnet ...
+func (mock *MockIpam) GetSubnet(string) (models.Subnet, error) {
+	return models.Subnet{}, nil
+}
+
+// CreateSubnet ...
+func (mock *MockIpam) CreateSubnet(models.Subnet) error {
+	return nil
+}
+
+// UpdateSubnet ...
+func (mock *MockIpam) UpdateSubnet(models.Subnet) error {
+	return nil
+}
+
+// DeleteSubnet ...
+func (mock *MockIpam) DeleteSubnet(string) error {
+	return nil
+}
+
+// GetPoolSubnets ...
+func (mock *MockIpam) GetPoolSubnets(string) ([]models.Subnet, error) {
+	return []models.Subnet{}, nil
 }
