@@ -1,0 +1,19 @@
+version: "2"
+services:
+    mongodb:
+        image: "mongo:latest"
+        container_name: "mongodb"
+        hostname: "mongodb"
+        expose:
+            - "27017"
+
+    ipam:
+        build: .
+        image: "RackHD/ipam:latest"
+        container_name: "ipam"
+        hostname: "ipam"
+        ports:
+            - "8000:8000"
+        command: "/bin/ipam --mongo mongodb:27017"
+        depends_on:
+            - mongodb
