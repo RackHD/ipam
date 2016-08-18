@@ -9,7 +9,7 @@ services:
 
     ipam:
         build: .
-        image: "RackHD/ipam:latest"
+        image: "rackhd/ipam:latest"
         container_name: "ipam"
         hostname: "ipam"
         ports:

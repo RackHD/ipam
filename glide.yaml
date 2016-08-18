@@ -1,0 +1,7 @@
+package: github.com/RackHD/ipam
+import:
+- package: github.com/gorilla/handlers
+- package: github.com/gorilla/mux
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson
