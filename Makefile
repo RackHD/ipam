@@ -2,7 +2,7 @@ APPLICATION = ipam
 ORGANIZATION = RackHD
 
 DOCKER_DIR = /go/src/github.com/${ORGANIZATION}/${APPLICATION}
-DOCKER_IMAGE = skunkworxs/golang:1.7-wheezy
+DOCKER_IMAGE = rackhd/golang:1.7.0-wheezy
 DOCKER_CMD = docker run -ti --rm -v ${PWD}:${DOCKER_DIR} -w ${DOCKER_DIR} ${DOCKER_IMAGE}
 
 .PHONY: shell deps deps-local build build-local lint lint-local test test-local release
@@ -38,7 +38,7 @@ test-local: lint-local
 	@ginkgo -race -trace -randomizeAllSpecs -r
 
 release: build
-	@docker build -t skunkworxs/${APPLICATION} .
+	@docker build -t rackhd/${APPLICATION} .
 
 run: release
 	@docker-compose up
