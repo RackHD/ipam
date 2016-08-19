@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/RackHD/ipam.svg?branch=master)](https://travis-ci.org/RackHD/ipam)
+[![Coverage Status](https://coveralls.io/repos/github/RackHD/ipam/badge.svg?branch=master)](https://coveralls.io/github/RackHD/ipam?branch=master)
 
 # Overview
 
