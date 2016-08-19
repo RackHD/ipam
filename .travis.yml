@@ -6,3 +6,5 @@ go:
 - 1.7
 script:
 - make
+after_success:
+- make coveralls
