@@ -40,9 +40,9 @@ test-local: lint-local
 	@ginkgo -race -trace -randomizeAllSpecs -r -cover
 
 coveralls:
-	@${DOCKER_CMD} make coveralls-local
-
-coveralls-local:
+	@go get github.com/mattn/goveralls
+	@go get github.com/modocache/gover
+	@go get golang.org/x/tools/cmd/cover
 	@gover
 	@goveralls -coverprofile=gover.coverprofile -service=travis-ci
 
