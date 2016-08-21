@@ -33,11 +33,16 @@ func Do(req *http.Request) *http.Response {
 }
 
 type MockIpam struct {
-	Err     error
-	Pools   []models.Pool
-	Created models.Pool
-	Updated models.Pool
-	Deleted string
+	Err         error
+	Pools       []models.Pool
+	PoolCreated models.Pool
+	PoolUpdated models.Pool
+	PoolDeleted string
+
+	Subnets       []models.Subnet
+	SubnetCreated models.Subnet
+	SubnetUpdated models.Subnet
+	SubnetDeleted string
 }
 
 func NewMockIpam() *MockIpam {
@@ -48,6 +53,14 @@ func NewMockIpam() *MockIpam {
 				ID:   bson.ObjectIdHex("578af30bbc63780007d99195"),
 				Name: "Mock Pool",
 				Tags: []string{"mock"},
+			},
+		},
+		Subnets: []models.Subnet{
+			{
+				ID:   bson.ObjectIdHex("578af30bbc63780007d99195"),
+				Name: "Mock Subnet",
+				Tags: []string{"mock"},
+				Pool: bson.ObjectIdHex("578af30bbc63780007d99195"),
 			},
 		},
 	}
@@ -77,7 +90,7 @@ func (mock *MockIpam) CreatePool(pool models.Pool) error {
 		return mock.Err
 	}
 
-	mock.Created = pool
+	mock.PoolCreated = pool
 
 	return mock.Err
 }
@@ -88,7 +101,7 @@ func (mock *MockIpam) UpdatePool(pool models.Pool) error {
 		return mock.Err
 	}
 
-	mock.Updated = pool
+	mock.PoolUpdated = pool
 
 	return mock.Err
 }
@@ -99,37 +112,67 @@ func (mock *MockIpam) DeletePool(id string) error {
 		return mock.Err
 	}
 
-	mock.Deleted = id
+	mock.PoolDeleted = id
 
 	return mock.Err
 }
 
 // GetSubnets ...
 func (mock *MockIpam) GetSubnets() ([]models.Subnet, error) {
-	return []models.Subnet{}, nil
+	if mock.Err != nil {
+		return []models.Subnet{}, mock.Err
+	}
+
+	return mock.Subnets, mock.Err
 }
 
 // GetSubnet ...
 func (mock *MockIpam) GetSubnet(string) (models.Subnet, error) {
-	return models.Subnet{}, nil
+	if mock.Err != nil {
+		return models.Subnet{}, mock.Err
+	}
+
+	return mock.Subnets[0], mock.Err
 }
 
 // CreateSubnet ...
-func (mock *MockIpam) CreateSubnet(models.Subnet) error {
-	return nil
+func (mock *MockIpam) CreateSubnet(subnet models.Subnet) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.SubnetCreated = subnet
+
+	return mock.Err
 }
 
 // UpdateSubnet ...
-func (mock *MockIpam) UpdateSubnet(models.Subnet) error {
-	return nil
+func (mock *MockIpam) UpdateSubnet(subnet models.Subnet) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.SubnetUpdated = subnet
+
+	return mock.Err
 }
 
 // DeleteSubnet ...
-func (mock *MockIpam) DeleteSubnet(string) error {
-	return nil
+func (mock *MockIpam) DeleteSubnet(id string) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.SubnetDeleted = id
+
+	return mock.Err
 }
 
 // GetPoolSubnets ...
 func (mock *MockIpam) GetPoolSubnets(string) ([]models.Subnet, error) {
-	return []models.Subnet{}, nil
+	if mock.Err != nil {
+		return []models.Subnet{}, mock.Err
+	}
+
+	return mock.Subnets, mock.Err
 }

@@ -17,7 +17,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Pools Controller", func() {
+var _ = Describe("Subnets Controller", func() {
 	var (
 		router *mux.Router
 		mock   *MockIpam
@@ -28,7 +28,7 @@ var _ = Describe("Pools Controller", func() {
 		router = mux.NewRouter().StrictSlash(true)
 		mock = NewMockIpam()
 
-		_, err := controllers.NewPoolsController(router, mock)
+		_, err := controllers.NewSubnetsController(router, mock)
 		Expect(err).NotTo(HaveOccurred())
 
 		server = httptest.NewServer(router)
@@ -38,7 +38,7 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 200 status code", func() {
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				nil,
 			)
 
@@ -47,10 +47,10 @@ var _ = Describe("Pools Controller", func() {
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 		})
 
-		It("should return a list of pools", func() {
+		It("should return a list of subnets", func() {
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				nil,
 			)
 
@@ -58,10 +58,10 @@ var _ = Describe("Pools Controller", func() {
 
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			resource, err := factory.Request(resources.PoolsResourceType, "1.0.0")
+			resource, err := factory.Request(resources.SubnetsResourceType, "1.0.0")
 			Expect(err).ToNot(HaveOccurred())
 
-			err = resource.Marshal(mock.Pools)
+			err = resource.Marshal(mock.Subnets)
 			Expect(err).ToNot(HaveOccurred())
 
 			json, err := json.Marshal(resource)
@@ -78,7 +78,7 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				nil,
 			)
 
@@ -92,7 +92,7 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 200 status code", func() {
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -104,7 +104,7 @@ var _ = Describe("Pools Controller", func() {
 		It("should return the requested pool", func() {
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -113,10 +113,10 @@ var _ = Describe("Pools Controller", func() {
 
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			resource, err := factory.Request(resources.PoolResourceType, "1.0.0")
+			resource, err := factory.Request(resources.SubnetResourceType, "1.0.0")
 			Expect(err).ToNot(HaveOccurred())
 
-			err = resource.Marshal(mock.Pools[0])
+			err = resource.Marshal(mock.Subnets[0])
 			Expect(err).ToNot(HaveOccurred())
 
 			json, err := json.Marshal(resource)
@@ -133,7 +133,7 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -147,7 +147,7 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"GET",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -161,17 +161,17 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 201 status code", func() {
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
@@ -181,34 +181,34 @@ var _ = Describe("Pools Controller", func() {
 		It("should add the new model with the corresponding fields", func() {
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
-			Expect(mock.PoolCreated).NotTo(BeZero())
-			Expect(mock.PoolCreated.Name).To(Equal("New Pool"))
-			Expect(mock.PoolCreated.Tags).To(Equal([]string{"New Pool Tag"}))
+			Expect(mock.SubnetCreated).NotTo(BeZero())
+			Expect(mock.SubnetCreated.Name).To(Equal("New Subnet"))
+			Expect(mock.SubnetCreated.Tags).To(Equal([]string{"New Subnet Tag"}))
 		})
 
 		It("should return a 415 status code if no resource type and version are specified", func() {
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
@@ -223,17 +223,17 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 415 status code if the resource version is not available", func() {
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=0.0.7")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=0.0.7")
 
 			res := Do(req)
 
@@ -243,10 +243,10 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 415 status code if the resource specified is the wrong type", func() {
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
@@ -265,17 +265,17 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"POST",
-				server.URL+"/pools",
+				server.URL+"/pools/578af30bbc63780007d99195/subnets",
 				strings.NewReader(`{
-					"name": "New Pool",
-					"tags": ["New Pool Tag"],
+					"name": "New Subnet",
+					"tags": ["New Subnet Tag"],
 					"metadata": {
 						"one": 1
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
@@ -288,17 +288,17 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 204 status code", func() {
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
@@ -308,34 +308,34 @@ var _ = Describe("Pools Controller", func() {
 		It("should update the model with the corresponding fields", func() {
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
 			Expect(res.StatusCode).To(Equal(http.StatusNoContent))
 
-			Expect(mock.PoolUpdated).NotTo(BeZero())
-			Expect(mock.PoolUpdated.Name).To(Equal("Updated Pool"))
-			Expect(mock.PoolUpdated.Tags).To(Equal([]string{"Updated Pool Tag"}))
+			Expect(mock.SubnetUpdated).NotTo(BeZero())
+			Expect(mock.SubnetUpdated.Name).To(Equal("Updated Subnet"))
+			Expect(mock.SubnetUpdated.Tags).To(Equal([]string{"Updated Subnet Tag"}))
 		})
 
 		It("should return a 415 status code if no resource type and version are specified", func() {
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
@@ -350,17 +350,17 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 415 status code if the resource version is not available", func() {
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=0.0.7")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=0.0.7")
 
 			res := Do(req)
 
@@ -370,10 +370,10 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 415 status code if the resource specified is the wrong type", func() {
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
@@ -392,17 +392,17 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
@@ -414,17 +414,17 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"PUT",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				strings.NewReader(`{
-					"name": "Updated Pool",
-					"tags": ["Updated Pool Tag"],
+					"name": "Updated Subnet",
+					"tags": ["Updated Subnet Tag"],
 					"metadata": {
 						"one": "one"
 					}
 				}`),
 			)
 
-			req.Header.Set(helpers.HeaderContentType, resources.PoolResourceType+";version=1.0.0")
+			req.Header.Set(helpers.HeaderContentType, resources.SubnetResourceType+";version=1.0.0")
 
 			res := Do(req)
 
@@ -436,7 +436,7 @@ var _ = Describe("Pools Controller", func() {
 		It("should return a 200 status code", func() {
 			req := NewRequest(
 				"DELETE",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -448,7 +448,7 @@ var _ = Describe("Pools Controller", func() {
 		It("should delete the model with the corresponding id", func() {
 			req := NewRequest(
 				"DELETE",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -456,7 +456,7 @@ var _ = Describe("Pools Controller", func() {
 
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			Expect(mock.PoolDeleted).To(Equal("578af30bbc63780007d99195"))
+			Expect(mock.SubnetDeleted).To(Equal("578af30bbc63780007d99195"))
 		})
 
 		It("should return a 500 if an error occurs", func() {
@@ -464,7 +464,7 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"DELETE",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
@@ -478,7 +478,7 @@ var _ = Describe("Pools Controller", func() {
 
 			req := NewRequest(
 				"DELETE",
-				server.URL+"/pools/578af30bbc63780007d99195",
+				server.URL+"/subnets/578af30bbc63780007d99195",
 				nil,
 			)
 
