@@ -22,7 +22,7 @@ func Request(resource string, version string) (interfaces.Resource, error) {
 		return creator(version)
 	}
 
-	return nil, fmt.Errorf("Unable to locate resource %s.", resource)
+	return nil, fmt.Errorf("Request: Unable to locate resource %s.", resource)
 }
 
 // Require finds a resource creator function by the resource identifier and verifies
@@ -35,7 +35,7 @@ func Require(resource string, version string) (interfaces.Resource, error) {
 	}
 
 	if provided.Version() != version {
-		return nil, fmt.Errorf("Unable to locate resource %s, version %s.", resource, version)
+		return nil, fmt.Errorf("Require: Unable to locate resource %s, version %s.", resource, version)
 	}
 
 	return provided, nil
