@@ -37,7 +37,7 @@ func NewSubnetsController(router *mux.Router, ipam interfaces.Ipam) (*SubnetsCon
 func (c *SubnetsController) Index(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
 
-	subnets, err := c.ipam.GetPoolSubnets(vars["id"])
+	subnets, err := c.ipam.GetSubnets(vars["id"])
 	if err != nil {
 		return err
 	}

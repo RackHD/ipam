@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 	"github.com/RackHD/ipam/controllers"
 	"github.com/RackHD/ipam/ipam"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 
 	"gopkg.in/mgo.v2"
 )
@@ -43,6 +43,11 @@ func main() {
 	}
 
 	_, err = controllers.NewSubnetsController(router, ipam)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	_, err = controllers.NewReservationsController(router, ipam)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
