@@ -84,10 +84,8 @@ run directly using the Makefile as a guide for their format.
 ### Reservation Routes
 
 * GET /subnets/{id}/reservations
-* GET /pools/{id}/reservations
 * GET /reservations/{id}
 * POST /subnets/{id}/reservations
-* POST /pools/{id}/reservations
 * DELETE /reservations/{id}
 * PATCH /reservations/{id}
 

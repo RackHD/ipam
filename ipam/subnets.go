@@ -9,13 +9,13 @@ import (
 const IpamCollectionSubnets string = "subnets"
 
 // GetSubnets returns a list of Subnets.
-func (ipam *Ipam) GetSubnets() ([]models.Subnet, error) {
+func (ipam *Ipam) GetSubnets(id string) ([]models.Subnet, error) {
 	session := ipam.session.Copy()
 	defer session.Close()
 
 	var subnets []models.Subnet
 
-	session.DB(IpamDatabase).C(IpamCollectionSubnets).Find(nil).All(&subnets)
+	session.DB(IpamDatabase).C(IpamCollectionSubnets).Find(bson.M{"subnet": bson.ObjectIdHex(id)}).All(&subnets)
 
 	return subnets, nil
 }
@@ -52,16 +52,4 @@ func (ipam *Ipam) DeleteSubnet(id string) error {
 	defer session.Close()
 
 	return session.DB(IpamDatabase).C(IpamCollectionSubnets).RemoveId(id)
-}
-
-// GetPoolSubnets gets a list of Subnets belonging to the given Pool.
-func (ipam *Ipam) GetPoolSubnets(id string) ([]models.Subnet, error) {
-	session := ipam.session.Copy()
-	defer session.Close()
-
-	var subnets []models.Subnet
-
-	session.DB(IpamDatabase).C(IpamCollectionSubnets).Find(bson.M{"subnet": bson.ObjectIdHex(id)}).All(&subnets)
-
-	return subnets, nil
 }

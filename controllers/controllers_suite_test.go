@@ -33,7 +33,8 @@ func Do(req *http.Request) *http.Response {
 }
 
 type MockIpam struct {
-	Err         error
+	Err error
+
 	Pools       []models.Pool
 	PoolCreated models.Pool
 	PoolUpdated models.Pool
@@ -43,6 +44,11 @@ type MockIpam struct {
 	SubnetCreated models.Subnet
 	SubnetUpdated models.Subnet
 	SubnetDeleted string
+
+	Reservations       []models.Reservation
+	ReservationCreated models.Reservation
+	ReservationUpdated models.Reservation
+	ReservationDeleted string
 }
 
 func NewMockIpam() *MockIpam {
@@ -61,6 +67,14 @@ func NewMockIpam() *MockIpam {
 				Name: "Mock Subnet",
 				Tags: []string{"mock"},
 				Pool: bson.ObjectIdHex("578af30bbc63780007d99195"),
+			},
+		},
+		Reservations: []models.Reservation{
+			{
+				ID:     bson.ObjectIdHex("578af30bbc63780007d99195"),
+				Name:   "Mock Subnet",
+				Tags:   []string{"mock"},
+				Subnet: bson.ObjectIdHex("578af30bbc63780007d99195"),
 			},
 		},
 	}
@@ -118,7 +132,7 @@ func (mock *MockIpam) DeletePool(id string) error {
 }
 
 // GetSubnets ...
-func (mock *MockIpam) GetSubnets() ([]models.Subnet, error) {
+func (mock *MockIpam) GetSubnets(string) ([]models.Subnet, error) {
 	if mock.Err != nil {
 		return []models.Subnet{}, mock.Err
 	}
@@ -168,11 +182,62 @@ func (mock *MockIpam) DeleteSubnet(id string) error {
 	return mock.Err
 }
 
-// GetPoolSubnets ...
-func (mock *MockIpam) GetPoolSubnets(string) ([]models.Subnet, error) {
+// GetReservations ...
+func (mock *MockIpam) GetReservations(string) ([]models.Reservation, error) {
 	if mock.Err != nil {
-		return []models.Subnet{}, mock.Err
+		return []models.Reservation{}, mock.Err
 	}
 
-	return mock.Subnets, mock.Err
+	return mock.Reservations, mock.Err
+}
+
+// GetReservation ...
+func (mock *MockIpam) GetReservation(string) (models.Reservation, error) {
+	if mock.Err != nil {
+		return models.Reservation{}, mock.Err
+	}
+
+	return mock.Reservations[0], mock.Err
+}
+
+// CreateReservation ...
+func (mock *MockIpam) CreateReservation(reservation models.Reservation) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.ReservationCreated = reservation
+
+	return mock.Err
+}
+
+// UpdateReservation ...
+func (mock *MockIpam) UpdateReservation(reservation models.Reservation) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.ReservationUpdated = reservation
+
+	return mock.Err
+}
+
+// DeleteReservation ...
+func (mock *MockIpam) DeleteReservation(id string) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.ReservationDeleted = id
+
+	return mock.Err
+}
+
+// GetPoolReservations ...
+func (mock *MockIpam) GetPoolReservations(string) ([]models.Reservation, error) {
+	if mock.Err != nil {
+		return []models.Reservation{}, mock.Err
+	}
+
+	return mock.Reservations, mock.Err
 }

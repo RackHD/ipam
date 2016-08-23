@@ -6,4 +6,5 @@ package interfaces
 type Ipam interface {
 	Pools
 	Subnets
+	Reservations
 }
