@@ -28,7 +28,7 @@ func RenderError(w http.ResponseWriter, err error) {
 }
 
 // RenderLocation writes the location and associated status code to the response.
-func RenderLocation(w http.ResponseWriter, r *http.Request, status int, location string) error {
+func RenderLocation(w http.ResponseWriter, status int, location string) error {
 	w.Header().Add(HeaderLocation, location)
 	w.WriteHeader(status)
 	w.Write([]byte{})
@@ -49,7 +49,7 @@ func AcceptResource(r *http.Request, expected string) (interface{}, error) {
 	if mediaType.Type != expected {
 		return nil, NewHTTPStatusError(
 			http.StatusUnsupportedMediaType,
-			"Invalid Resource: %s != %s", mediaType.Type, expected,
+			"Unsupported Resource Type: %s != %s", mediaType.Type, expected,
 		)
 	}
 
@@ -57,7 +57,7 @@ func AcceptResource(r *http.Request, expected string) (interface{}, error) {
 	if err != nil {
 		return nil, NewHTTPStatusError(
 			http.StatusUnsupportedMediaType,
-			"Invalid Resource: %s", err,
+			"Unsupported Resource Version: %s", err,
 		)
 	}
 
