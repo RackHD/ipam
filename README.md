@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/RackHD/ipam.svg?branch=master)](https://travis-ci.org/RackHD/ipam)
 [![Coverage Status](https://coveralls.io/repos/github/RackHD/ipam/badge.svg?branch=master)](https://coveralls.io/github/RackHD/ipam?branch=master)
+[![GoDoc](https://godoc.org/github.com/RackHD/ipam?status.svg)](https://godoc.org/github.com/RackHD/ipam)
 
 Contribute
 ----------
@@ -16,7 +17,7 @@ We also have a #InfraEnablers Slack channel: You can get an invite by requesting
 Documentation
 -------------
 
-TODO:
+You can find documentation for IPAM here: [![GoDoc](https://godoc.org/github.com/RackHD/ipam?status.svg)](https://godoc.org/github.com/RackHD/ipam)
 
 Licensing
 ---------
