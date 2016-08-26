@@ -56,7 +56,7 @@ func (c *PoolsController) Create(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 
-		return helpers.RenderLocation(w, r, http.StatusCreated, fmt.Sprintf("/pools/%s", pool.ID.Hex()))
+		return helpers.RenderLocation(w, http.StatusCreated, fmt.Sprintf("/pools/%s", pool.ID.Hex()))
 	}
 
 	return fmt.Errorf("Invalid Resource Type")
@@ -91,7 +91,7 @@ func (c *PoolsController) Update(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 
-		return helpers.RenderLocation(w, r, http.StatusNoContent, fmt.Sprintf("/pools/%s", pool.ID.Hex()))
+		return helpers.RenderLocation(w, http.StatusNoContent, fmt.Sprintf("/pools/%s", pool.ID.Hex()))
 	}
 
 	return fmt.Errorf("Invalid Resource Type")
@@ -106,5 +106,5 @@ func (c *PoolsController) Delete(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return helpers.RenderLocation(w, r, http.StatusOK, fmt.Sprintf("/pools"))
+	return helpers.RenderLocation(w, http.StatusOK, fmt.Sprintf("/pools"))
 }

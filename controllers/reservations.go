@@ -62,7 +62,7 @@ func (c *ReservationsController) Create(w http.ResponseWriter, r *http.Request) 
 			return err
 		}
 
-		return helpers.RenderLocation(w, r, http.StatusCreated, fmt.Sprintf("/reservations/%s", reservation.ID.Hex()))
+		return helpers.RenderLocation(w, http.StatusCreated, fmt.Sprintf("/reservations/%s", reservation.ID.Hex()))
 	}
 
 	return fmt.Errorf("Invalid Resource Type")
@@ -97,7 +97,7 @@ func (c *ReservationsController) Update(w http.ResponseWriter, r *http.Request) 
 			return err
 		}
 
-		return helpers.RenderLocation(w, r, http.StatusNoContent, fmt.Sprintf("/reservations/%s", reservation.ID.Hex()))
+		return helpers.RenderLocation(w, http.StatusNoContent, fmt.Sprintf("/reservations/%s", reservation.ID.Hex()))
 	}
 
 	return fmt.Errorf("Invalid Resource Type")
@@ -112,5 +112,5 @@ func (c *ReservationsController) Delete(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
-	return helpers.RenderLocation(w, r, http.StatusOK, fmt.Sprintf("/reservations"))
+	return helpers.RenderLocation(w, http.StatusOK, fmt.Sprintf("/reservations"))
 }
