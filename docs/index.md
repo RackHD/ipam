@@ -54,11 +54,33 @@ https://docs.docker.com/engine/installation/linux/ubuntulinux/
 In addition IPAM is using make to provide an abstraction for complex Docker commands.  On Mac/Linux any version of GNU make is likely suitable.  On Windows something like http://gnuwin32.sourceforge.net/packages/make.htm may be suitable.  Otherwise the Docker commands can be
 run directly using the Makefile as a guide for their format.
 
+*Note that debug is enabled (by default) in the MongoDB Go driver. If you would like to disable, set "mgoDebug"  to false in "main.go", but do so only after you are sure things are working properly. (refer to "Hint" below).*
+
 1. git clone git@github.com:RackHD/ipam.git
 2. cd ipam
 3. make
 4. make run
 5. http://localhost:8000/pools
+
+##
+
+**Hint**
+
+In certain environments, IPAM is unable to connect to MongoDB and will indicate this by logging the following messages in the debug output.  
+
+**ipam       | 2016/09/16 19:50:54 no reachable servers**
+
+**ipam exited with code 1**
+
+Often times, this is caused by hostname resolution (DNS) problems. Locate the following message in the debug output and check to see if the IP address to which "mongodb" is resolving is correct for your environment.  
+
+**SYNC Address mongodb:27017 resolved as 10.31.61.127:27017**
+
+If the address is not on one of the Docker "bridge" networks, but rather on some external network, then there is likely an external DNS resolving the "mongodb" hostname. 
+
+To resolve the issue, you must either configure down the NIC that has the external DNS, or reconfigure your environment such that it is not living on a network that has a DNS that will resolve for this hostname.
+
+##
 
 # Details
 
