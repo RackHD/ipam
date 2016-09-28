@@ -3,7 +3,7 @@ services:
     mongodb:
         image: "mongo:latest"
         container_name: "mongodb"
-        hostname: "mongodb"
+        hostname: "mongodb:3.0.12"
         expose:
             - "27017"
 

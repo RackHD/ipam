@@ -15,7 +15,7 @@ func (ipam *Ipam) GetSubnets(id string) ([]models.Subnet, error) {
 
 	var subnets []models.Subnet
 
-	session.DB(IpamDatabase).C(IpamCollectionSubnets).Find(bson.M{"subnet": bson.ObjectIdHex(id)}).All(&subnets)
+	session.DB(IpamDatabase).C(IpamCollectionSubnets).Find(bson.M{"pool": bson.ObjectIdHex(id)}).All(&subnets)
 
 	return subnets, nil
 }
