@@ -1,6 +1,9 @@
 package ipam
 
 import (
+	"encoding/binary"
+	"fmt"
+
 	"github.com/RackHD/ipam/models"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -35,15 +38,50 @@ func (ipam *Ipam) CreateSubnet(subnet models.Subnet) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
-	return session.DB(IpamDatabase).C(IpamCollectionSubnets).Insert(subnet)
+	err := session.DB(IpamDatabase).C(IpamCollectionSubnets).Insert(subnet)
+	if err != nil {
+		return err
+	}
+
+	// Convert byte arrays to integers (IPv4 only).
+	start := binary.BigEndian.Uint32(subnet.Start.Data[len(subnet.Start.Data)-4:])
+	end := binary.BigEndian.Uint32(subnet.End.Data[len(subnet.End.Data)-4:])
+
+	// Iterate through the range of IP's and insert a record for each.
+	for ; start < end; start++ {
+		// IP's are stored as 16 byte arrays and we're only doing IPv4 so prepend
+		// 12 empty bytes.
+		prefix := make([]byte, 12)
+		address := make([]byte, 4)
+
+		// Create the lease record, tie it to the subnet.
+		lease := models.Lease{
+			ID:     bson.NewObjectId(),
+			Subnet: subnet.ID,
+			Address: bson.Binary{
+				Kind: 0,
+				Data: append(prefix, address...),
+			},
+		}
+
+		// Insert, though if we fail one we will have a partially populated subnet pool.
+		err := session.DB(IpamDatabase).C(IpamCollectionLeases).Insert(lease)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // UpdateSubnet updates a Subnet.
 func (ipam *Ipam) UpdateSubnet(subnet models.Subnet) error {
-	session := ipam.session.Copy()
-	defer session.Close()
+	return fmt.Errorf("UpdateSubnet Temporarily Disabled.")
 
-	return session.DB(IpamDatabase).C(IpamCollectionSubnets).UpdateId(subnet.ID, subnet)
+	// session := ipam.session.Copy()
+	// defer session.Close()
+	//
+	// return session.DB(IpamDatabase).C(IpamCollectionSubnets).UpdateId(subnet.ID, subnet)
 }
 
 // DeleteSubnet removes a Subnet.
