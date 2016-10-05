@@ -50,9 +50,11 @@ func (ipam *Ipam) CreateSubnet(subnet models.Subnet) error {
 	// Iterate through the range of IP's and insert a record for each.
 	for ; start < end; start++ {
 		// IP's are stored as 16 byte arrays and we're only doing IPv4 so prepend
-		// 12 empty bytes.
-		prefix := make([]byte, 12)
+		// the net.IP prefix that denotes an IPv4 address.
+		prefix := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff}
 		address := make([]byte, 4)
+
+		binary.BigEndian.PutUint32(address, start)
 
 		// Create the lease record, tie it to the subnet.
 		lease := models.Lease{

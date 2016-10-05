@@ -51,3 +51,6 @@ release: build
 
 run: release
 	@docker-compose up
+
+mongo:
+	@docker exec -it mongodb mongo ipam

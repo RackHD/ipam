@@ -49,6 +49,9 @@ type MockIpam struct {
 	ReservationCreated models.Reservation
 	ReservationUpdated models.Reservation
 	ReservationDeleted string
+
+	Leases       []models.Lease
+	LeaseUpdated models.Lease
 }
 
 func NewMockIpam() *MockIpam {
@@ -240,4 +243,33 @@ func (mock *MockIpam) GetPoolReservations(string) ([]models.Reservation, error) 
 	}
 
 	return mock.Reservations, mock.Err
+}
+
+// GetReservations ...
+func (mock *MockIpam) GetLeases(string) ([]models.Lease, error) {
+	if mock.Err != nil {
+		return []models.Lease{}, mock.Err
+	}
+
+	return mock.Leases, mock.Err
+}
+
+// GetReservation ...
+func (mock *MockIpam) GetLease(string) (models.Lease, error) {
+	if mock.Err != nil {
+		return models.Lease{}, mock.Err
+	}
+
+	return mock.Leases[0], mock.Err
+}
+
+// UpdateReservation ...
+func (mock *MockIpam) UpdateLease(lease models.Lease) error {
+	if mock.Err != nil {
+		return mock.Err
+	}
+
+	mock.LeaseUpdated = lease
+
+	return mock.Err
 }
