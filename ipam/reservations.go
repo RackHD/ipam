@@ -35,7 +35,15 @@ func (ipam *Ipam) CreateReservation(reservation models.Reservation) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
-	return session.DB(IpamDatabase).C(IpamCollectionReservations).Insert(reservation)
+	err := session.DB(IpamDatabase).C(IpamCollectionReservations).Insert(reservation)
+	if err != nil {
+		return err
+	}
+
+	return session.DB(IpamDatabase).C(IpamCollectionLeases).Update(
+		bson.M{"reservation": nil},
+		bson.M{"$set": bson.M{"reservation": reservation.ID}},
+	)
 }
 
 // UpdateReservation updates a Reservation.

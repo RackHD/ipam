@@ -9,4 +9,6 @@ type Subnet struct {
 	Tags     []string      `bson:"tags"`
 	Metadata interface{}   `bson:"metadata"`
 	Pool     bson.ObjectId `bson:"pool,omitempty"`
+	Start    bson.Binary   `bson:"start"`
+	End      bson.Binary   `bson:"end"`
 }

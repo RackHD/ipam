@@ -26,10 +26,10 @@ func main() {
 	var mgoDebug = true
 
 	if mgoDebug {
-        	mgo.SetDebug(true)
-        	var aLogger *log.Logger
-        	aLogger = log.New(os.Stderr, "", log.LstdFlags)
-        	mgo.SetLogger(aLogger)
+		mgo.SetDebug(true)
+		var aLogger *log.Logger
+		aLogger = log.New(os.Stderr, "", log.LstdFlags)
+		mgo.SetLogger(aLogger)
 	}
 
 	// Start off with a new mux router.
@@ -59,6 +59,11 @@ func main() {
 	}
 
 	_, err = controllers.NewReservationsController(router, ipam)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	_, err = controllers.NewLeasesController(router, ipam)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

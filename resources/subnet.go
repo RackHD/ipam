@@ -2,6 +2,7 @@ package resources
 
 import (
 	"fmt"
+	"net"
 
 	"github.com/RackHD/ipam/interfaces"
 	"github.com/RackHD/ipam/models"
@@ -31,6 +32,8 @@ type SubnetV1 struct {
 	Tags     []string    `json:"tags"`
 	Metadata interface{} `json:"metadata"`
 	Pool     string      `json:"pool"`
+	Start    string      `json:"start"`
+	End      string      `json:"end"`
 }
 
 // Type returns the resource type for use in rendering HTTP response headers.
@@ -51,6 +54,8 @@ func (s *SubnetV1) Marshal(object interface{}) error {
 		s.Tags = target.Tags
 		s.Metadata = target.Metadata
 		s.Pool = target.Pool.Hex()
+		s.Start = net.IP(target.Start.Data).String()
+		s.End = net.IP(target.End.Data).String()
 
 		return nil
 	}
@@ -69,5 +74,13 @@ func (s *SubnetV1) Unmarshal() (interface{}, error) {
 		Name:     s.Name,
 		Tags:     s.Tags,
 		Metadata: s.Metadata,
+		Start: bson.Binary{
+			Kind: 0,
+			Data: net.ParseIP(s.Start),
+		},
+		End: bson.Binary{
+			Kind: 0,
+			Data: net.ParseIP(s.End),
+		},
 	}, nil
 }

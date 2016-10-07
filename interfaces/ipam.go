@@ -7,4 +7,5 @@ type Ipam interface {
 	Pools
 	Subnets
 	Reservations
+	Leases
 }
