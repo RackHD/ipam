@@ -91,5 +91,5 @@ func (ipam *Ipam) DeleteSubnet(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
-	return session.DB(IpamDatabase).C(IpamCollectionSubnets).RemoveId(id)
+	return session.DB(IpamDatabase).C(IpamCollectionSubnets).RemoveId(bson.ObjectIdHex(id))
 }

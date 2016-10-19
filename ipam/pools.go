@@ -51,5 +51,5 @@ func (ipam *Ipam) DeletePool(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
-	return session.DB(IpamDatabase).C(IpamCollectionPools).RemoveId(id)
+	return session.DB(IpamDatabase).C(IpamCollectionPools).RemoveId(bson.ObjectIdHex(id))
 }
