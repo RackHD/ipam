@@ -4,7 +4,7 @@ ORGANIZATION = RackHD
 TTY = $(shell if [ -t 0 ]; then echo "-ti"; fi)
 
 DOCKER_DIR = /go/src/github.com/${ORGANIZATION}/${APPLICATION}
-DOCKER_IMAGE = rackhd/golang:1.7.0-wheezy
+DOCKER_IMAGE = rackhd/golang:1.7.1-wheezy
 DOCKER_CMD = docker run ${TTY} --rm -v ${PWD}:${DOCKER_DIR} -w ${DOCKER_DIR} ${DOCKER_IMAGE}
 
 .PHONY: shell deps deps-local build build-local lint lint-local test test-local release

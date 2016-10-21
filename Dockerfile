@@ -1,7 +1,5 @@
-FROM debian:wheezy
+FROM rackhd/golang:1.7.1-wheezy
 
-EXPOSE 8000
+ADD ./bin/ipam /go/bin/ipam
 
-ADD ./bin/ipam /bin/ipam
-
-ENTRYPOINT /bin/ipam --mongo mongodb:27017
+ENTRYPOINT ["/go/bin/ipam"]
