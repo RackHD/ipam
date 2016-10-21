@@ -17,10 +17,11 @@ import (
 var mongo string
 
 func init() {
-	flag.StringVar(&mongo, "mongo", "mongodb:27017", "port to connect to mongodb container")
+	flag.StringVar(&mongo, "mongo", "ipam_mongo:27017", "port to connect to mongodb container")
 }
 
 func main() {
+	flag.Parse()
 
 	// Default to enable mgo debug. Set to false to disable.
 	var mgoDebug = true
