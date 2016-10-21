@@ -59,5 +59,5 @@ func (ipam *Ipam) DeleteReservation(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
-	return session.DB(IpamDatabase).C(IpamCollectionReservations).RemoveId(id)
+	return session.DB(IpamDatabase).C(IpamCollectionReservations).RemoveId(bson.ObjectIdHex(id))
 }
