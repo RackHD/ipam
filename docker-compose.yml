@@ -1,19 +1,21 @@
 version: "2"
 services:
     mongodb:
-        image: "mongo:latest"
-        container_name: "mongodb"
-        hostname: "mongodb:3.0.12"
-        expose:
-            - "27017"
+      image: "mongo:latest"
+      container_name: "ipam_mongo"
+      hostname: "ipam_mongo"
+      expose:
+        - "27017"
 
     ipam:
-        build: .
-        image: "rackhd/ipam:latest"
-        container_name: "ipam"
-        hostname: "ipam"
-        ports:
-            - "8000:8000"
-        command: "/bin/ipam --mongo mongodb:27017"
-        depends_on:
-            - mongodb
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: "rackhd/ipam:latest"
+      container_name: "ipam"
+      hostname: "ipam"
+      ports:
+        - "8000:8000"
+      command: "-mongo ipam_mongo:27017"
+      depends_on:
+        - mongodb
