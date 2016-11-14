@@ -41,7 +41,7 @@ func (ipam *Ipam) CreateReservation(reservation models.Reservation) error {
 	}
 
 	return session.DB(IpamDatabase).C(IpamCollectionLeases).Update(
-		bson.M{"reservation": nil},
+		bson.M{"reservation": nil, "subnet": reservation.Subnet},
 		bson.M{"$set": bson.M{"reservation": reservation.ID}},
 	)
 }
@@ -58,6 +58,14 @@ func (ipam *Ipam) UpdateReservation(reservation models.Reservation) error {
 func (ipam *Ipam) DeleteReservation(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
+
+	err := session.DB(IpamDatabase).C(IpamCollectionLeases).Update(
+		bson.M{"reservation": bson.ObjectIdHex(id)},
+		bson.M{"$set": bson.M{"reservation": nil}},
+	)
+	if err != nil {
+		return err
+	}
 
 	return session.DB(IpamDatabase).C(IpamCollectionReservations).RemoveId(bson.ObjectIdHex(id))
 }
