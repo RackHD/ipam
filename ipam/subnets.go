@@ -86,10 +86,36 @@ func (ipam *Ipam) UpdateSubnet(subnet models.Subnet) error {
 	// return session.DB(IpamDatabase).C(IpamCollectionSubnets).UpdateId(subnet.ID, subnet)
 }
 
-// DeleteSubnet removes a Subnet.
+// DeleteSubnet removes a Subnet and all revervations and leases associated to it
 func (ipam *Ipam) DeleteSubnet(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
+	err := ipam.DeleteReservations(id)
+	if err != nil {
+		return err
+	}
+
+	err = ipam.DeleteLeases(id)
+	if err != nil {
+		return err
+	}
+
 	return session.DB(IpamDatabase).C(IpamCollectionSubnets).RemoveId(bson.ObjectIdHex(id))
+}
+
+// DeleteSubnets removes all subnet in a pool
+func (ipam *Ipam) DeleteSubnets(id string) error {
+	subnets, err := ipam.GetSubnets(id)
+	if err != nil {
+		return err
+	}
+
+	for _, subnet := range subnets {
+		err := ipam.DeleteSubnet(subnet.ID.Hex())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

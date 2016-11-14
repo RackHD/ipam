@@ -37,3 +37,12 @@ func (ipam *Ipam) UpdateLease(reservation models.Lease) error {
 
 	return session.DB(IpamDatabase).C(IpamCollectionLeases).UpdateId(reservation.ID, reservation)
 }
+
+// DeleteLeases removes all leases associated to a subnet
+func (ipam *Ipam) DeleteLeases(id string) error {
+	session := ipam.session.Copy()
+	defer session.Close()
+
+	_, err := session.DB(IpamDatabase).C(IpamCollectionLeases).RemoveAll(bson.M{"subnet": bson.ObjectIdHex(id)})
+	return err
+}

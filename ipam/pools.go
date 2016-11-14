@@ -51,5 +51,10 @@ func (ipam *Ipam) DeletePool(id string) error {
 	session := ipam.session.Copy()
 	defer session.Close()
 
+	err := ipam.DeleteSubnets(id)
+	if err != nil {
+		return err
+	}
+
 	return session.DB(IpamDatabase).C(IpamCollectionPools).RemoveId(bson.ObjectIdHex(id))
 }

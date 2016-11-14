@@ -69,3 +69,19 @@ func (ipam *Ipam) DeleteReservation(id string) error {
 
 	return session.DB(IpamDatabase).C(IpamCollectionReservations).RemoveId(bson.ObjectIdHex(id))
 }
+
+// DeleteReservations remove all reservations in a subnet
+func (ipam *Ipam) DeleteReservations(id string) error {
+	reservations, err := ipam.GetReservations(id)
+	if err != nil {
+		return err
+	}
+
+	for _, reservation := range reservations {
+		err := ipam.DeleteReservation(reservation.ID.Hex())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
