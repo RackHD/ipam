@@ -31,7 +31,7 @@ type SubnetV1 struct {
 	Name     string      `json:"name"`
 	Tags     []string    `json:"tags"`
 	Metadata interface{} `json:"metadata"`
-	Pool     string      `json:"pool"`
+	Pool     string      `json:"pool"` //PoolID
 	Start    string      `json:"start"`
 	End      string      `json:"end"`
 }
