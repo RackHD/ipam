@@ -27,7 +27,7 @@ var _ = Describe("Client tests", func() {
 		})
 
 		AfterEach(func() {
-			poolLocation, err := ipamClient.Pools().Delete(pool.ID, pool)
+			poolLocation, err := ipamClient.DeletePool(pool.ID, pool)
 			Expect(err).To(BeNil())
 			Expect(poolLocation).To(Equal("/pools"))
 		})
@@ -38,7 +38,7 @@ var _ = Describe("Client tests", func() {
 				Metadata: "yodawg I heard you like interfaces",
 			}
 
-			pool, err = ipamClient.Pools().CreateShowPool(pool)
+			pool, err = ipamClient.CreateShowPool(pool)
 			Expect(err).To(BeNil())
 			Expect(pool.ID).ToNot(Equal(""))
 			Expect(pool.Name).To(Equal("Pool1"))
@@ -59,7 +59,7 @@ var _ = Describe("Client tests", func() {
 				Name: "SubnetTestPool1",
 			}
 
-			pool, err = ipamClient.Pools().CreateShowPool(pool)
+			pool, err = ipamClient.CreateShowPool(pool)
 			Expect(err).To(BeNil())
 			Expect(pool.ID).ToNot(Equal(""))
 			Expect(pool.Name).To(Equal("SubnetTestPool1"))
@@ -67,7 +67,7 @@ var _ = Describe("Client tests", func() {
 		})
 
 		AfterEach(func() {
-			poolLocation, err := ipamClient.Pools().Delete(pool.ID, pool)
+			poolLocation, err := ipamClient.DeletePool(pool.ID, pool)
 			Expect(err).To(BeNil())
 			Expect(poolLocation).To(Equal("/pools"))
 		})
@@ -81,7 +81,7 @@ var _ = Describe("Client tests", func() {
 				End:   end,
 			}
 
-			subnet, err = ipamClient.Subnets().CreateShowSubnet(pool.ID, subnet)
+			subnet, err = ipamClient.CreateShowSubnet(pool.ID, subnet)
 			Expect(err).To(BeNil())
 			Expect(subnet.ID).ToNot(Equal(""))
 			Expect(subnet.Name).To(Equal("Subnet1"))
@@ -105,7 +105,7 @@ var _ = Describe("Client tests", func() {
 				Name: "ReservationTestPool1",
 			}
 
-			pool, err = ipamClient.Pools().CreateShowPool(pool)
+			pool, err = ipamClient.CreateShowPool(pool)
 			Expect(err).To(BeNil())
 			Expect(pool.ID).ToNot(Equal(""))
 			Expect(pool.Name).To(Equal("ReservationTestPool1"))
@@ -117,7 +117,7 @@ var _ = Describe("Client tests", func() {
 				End:   end,
 			}
 
-			subnet, err = ipamClient.Subnets().CreateShowSubnet(pool.ID, subnet)
+			subnet, err = ipamClient.CreateShowSubnet(pool.ID, subnet)
 			Expect(err).To(BeNil())
 			Expect(subnet.ID).ToNot(Equal(""))
 			Expect(subnet.Name).To(Equal("ReservationTestSubnet1"))
@@ -126,7 +126,7 @@ var _ = Describe("Client tests", func() {
 		})
 
 		AfterEach(func() {
-			poolLocation, err := ipamClient.Pools().Delete(pool.ID, pool)
+			poolLocation, err := ipamClient.DeletePool(pool.ID, pool)
 			Expect(err).To(BeNil())
 			Expect(poolLocation).To(Equal("/pools"))
 		})
@@ -138,7 +138,7 @@ var _ = Describe("Client tests", func() {
 				Subnet: subnet.ID,
 			}
 
-			reservation, err = ipamClient.Reservations().CreateShowReservation(subnet.ID, reservation)
+			reservation, err = ipamClient.CreateShowReservation(subnet.ID, reservation)
 			Expect(err).To(BeNil())
 			Expect(reservation.ID).ToNot(Equal(""))
 			Expect(reservation.Name).To(Equal("Reservation1"))
@@ -162,7 +162,7 @@ var _ = Describe("Client tests", func() {
 				Name: "LeaseTestPool1",
 			}
 
-			pool, err = ipamClient.Pools().CreateShowPool(pool)
+			pool, err = ipamClient.CreateShowPool(pool)
 			Expect(err).To(BeNil())
 			Expect(pool.ID).ToNot(Equal(""))
 			Expect(pool.Name).To(Equal("LeaseTestPool1"))
@@ -174,7 +174,7 @@ var _ = Describe("Client tests", func() {
 				End:   end,
 			}
 
-			subnet, err = ipamClient.Subnets().CreateShowSubnet(pool.ID, subnet)
+			subnet, err = ipamClient.CreateShowSubnet(pool.ID, subnet)
 			Expect(err).To(BeNil())
 			Expect(subnet.ID).ToNot(Equal(""))
 			Expect(subnet.Name).To(Equal("LeaseTestSubnet1"))
@@ -185,7 +185,7 @@ var _ = Describe("Client tests", func() {
 				Subnet: subnet.ID,
 			}
 
-			reservation, err = ipamClient.Reservations().CreateShowReservation(subnet.ID, reservation)
+			reservation, err = ipamClient.CreateShowReservation(subnet.ID, reservation)
 			Expect(err).To(BeNil())
 			Expect(reservation.ID).ToNot(Equal(""))
 			Expect(reservation.Name).To(Equal("LeaseTestReservation1"))
@@ -196,7 +196,7 @@ var _ = Describe("Client tests", func() {
 				Subnet: subnet.ID,
 			}
 
-			reservation2, err = ipamClient.Reservations().CreateShowReservation(subnet.ID, reservation2)
+			reservation2, err = ipamClient.CreateShowReservation(subnet.ID, reservation2)
 			Expect(err).To(BeNil())
 			Expect(reservation2.ID).ToNot(Equal(""))
 			Expect(reservation2.Name).To(Equal("LeaseTestReservation2"))
@@ -205,18 +205,18 @@ var _ = Describe("Client tests", func() {
 		})
 
 		AfterEach(func() {
-			poolLocation, err := ipamClient.Pools().Delete(pool.ID, pool)
+			poolLocation, err := ipamClient.DeletePool(pool.ID, pool)
 			Expect(err).To(BeNil())
 			Expect(poolLocation).To(Equal("/pools"))
 		})
 
 		It("Should show all leases", func() {
-			leases, err = ipamClient.Leases().Index(reservation.ID)
+			leases, err = ipamClient.IndexLeases(reservation.ID)
 			Expect(err).To(BeNil())
 			Expect(leases.Leases[0].ID).ToNot(Equal(""))
 			Expect(leases.Leases[0].Reservation).To(Equal(reservation.ID))
 
-			leases2, err = ipamClient.Leases().Index(reservation2.ID)
+			leases2, err = ipamClient.IndexLeases(reservation2.ID)
 			Expect(err).To(BeNil())
 			Expect(leases2.Leases[0].ID).ToNot(Equal(""))
 			Expect(leases2.Leases[0].Reservation).To(Equal(reservation2.ID))

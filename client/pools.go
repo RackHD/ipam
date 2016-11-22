@@ -6,14 +6,9 @@ import (
 	"github.com/RackHD/ipam/resources"
 )
 
-//Pools can be used to query the Pools routes
-type Pools struct {
-	client *Client
-}
-
-// Index returns a list of Pools.
-func (p *Pools) Index() (resources.PoolsV1, error) {
-	pools, err := p.client.ReceiveResource("GET", "/pools", "", "")
+// IndexPools returns a list of Pools.
+func (c *Client) IndexPools() (resources.PoolsV1, error) {
+	pools, err := c.ReceiveResource("GET", "/pools", "", "")
 	if err != nil {
 		return resources.PoolsV1{}, err
 	}
@@ -24,10 +19,10 @@ func (p *Pools) Index() (resources.PoolsV1, error) {
 	return resources.PoolsV1{}, errors.New("Pool Index call error.")
 }
 
-// Create a pool and returns the location.
-func (p *Pools) Create(poolToCreate resources.PoolV1) (string, error) {
+// CreatePool a pool and returns the location.
+func (c *Client) CreatePool(poolToCreate resources.PoolV1) (string, error) {
 
-	poolLocation, err := p.client.SendResource("POST", "/pools", &poolToCreate)
+	poolLocation, err := c.SendResource("POST", "/pools", &poolToCreate)
 	if err != nil {
 		return "", err
 	}
@@ -35,8 +30,8 @@ func (p *Pools) Create(poolToCreate resources.PoolV1) (string, error) {
 }
 
 // CreateShowPool creates a pool and then returns that pool.
-func (p *Pools) CreateShowPool(poolToCreate resources.PoolV1) (resources.PoolV1, error) {
-	receivedPool, err := p.client.SendReceiveResource("POST", "GET", "/pools", &poolToCreate)
+func (c *Client) CreateShowPool(poolToCreate resources.PoolV1) (resources.PoolV1, error) {
+	receivedPool, err := c.SendReceiveResource("POST", "GET", "/pools", &poolToCreate)
 	if err != nil {
 		return resources.PoolV1{}, err
 	}
@@ -46,9 +41,9 @@ func (p *Pools) CreateShowPool(poolToCreate resources.PoolV1) (resources.PoolV1,
 	return resources.PoolV1{}, errors.New("CreateShowPool call error.")
 }
 
-// Show returns the requested Pool.
-func (p *Pools) Show(poolID string, poolToShow resources.PoolV1) (resources.PoolV1, error) {
-	receivedPool, err := p.client.ReceiveResource("GET", "/pools/"+poolID, poolToShow.Type(), poolToShow.Version())
+// ShowPool returns the requested Pool.
+func (c *Client) ShowPool(poolID string, poolToShow resources.PoolV1) (resources.PoolV1, error) {
+	receivedPool, err := c.ReceiveResource("GET", "/pools/"+poolID, poolToShow.Type(), poolToShow.Version())
 	if err != nil {
 		return resources.PoolV1{}, err
 	}
@@ -58,9 +53,9 @@ func (p *Pools) Show(poolID string, poolToShow resources.PoolV1) (resources.Pool
 	return resources.PoolV1{}, errors.New("Pools Show call error.")
 }
 
-// Update updates the requested Pool and returns its location.
-func (p *Pools) Update(poolID string, poolToUpdate resources.PoolV1) (string, error) {
-	location, err := p.client.SendResource("PATCH", "/pools/"+poolID, &poolToUpdate)
+// UpdatePool updates the requested Pool and returns its location.
+func (c *Client) UpdatePool(poolID string, poolToUpdate resources.PoolV1) (string, error) {
+	location, err := c.SendResource("PATCH", "/pools/"+poolID, &poolToUpdate)
 	if err != nil {
 		return "", err
 	}
@@ -68,8 +63,8 @@ func (p *Pools) Update(poolID string, poolToUpdate resources.PoolV1) (string, er
 }
 
 // UpdateShowPool updates a pool and then returns that pool.
-func (p *Pools) UpdateShowPool(poolID string, poolToUpdate resources.PoolV1) (resources.PoolV1, error) {
-	receivedPool, err := p.client.SendReceiveResource("PATCH", "GET", "/pools/"+poolID, &poolToUpdate)
+func (c *Client) UpdateShowPool(poolID string, poolToUpdate resources.PoolV1) (resources.PoolV1, error) {
+	receivedPool, err := c.SendReceiveResource("PATCH", "GET", "/pools/"+poolID, &poolToUpdate)
 	if err != nil {
 		return resources.PoolV1{}, err
 	}
@@ -79,9 +74,9 @@ func (p *Pools) UpdateShowPool(poolID string, poolToUpdate resources.PoolV1) (re
 	return resources.PoolV1{}, errors.New("UpdateShowPool call error.")
 }
 
-// Delete removes the requested Pool and returns the location.
-func (p *Pools) Delete(poolID string, poolToDelete resources.PoolV1) (string, error) {
-	location, err := p.client.SendResource("DELETE", "/pools/"+poolID, &poolToDelete)
+// DeletePool removes the requested Pool and returns the location.
+func (c *Client) DeletePool(poolID string, poolToDelete resources.PoolV1) (string, error) {
+	location, err := c.SendResource("DELETE", "/pools/"+poolID, &poolToDelete)
 	if err != nil {
 		return "", err
 	}

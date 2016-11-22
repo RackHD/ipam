@@ -6,9 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"mime"
-
 	"net/http"
+	"time"
 
 	"github.com/RackHD/ipam/controllers/helpers"
 	"github.com/RackHD/ipam/interfaces"
@@ -29,27 +30,18 @@ func NewClient(address string) *Client {
 		Address: address,
 		Scheme:  "http",
 	}
-	return c
-}
 
-//Leases returns a handle to the Leases routes
-func (c *Client) Leases() *Leases {
-	return &Leases{c}
-}
+	// Make sure IPAM connection is alive, with retries
+	for i := 0; i < 5; i++ {
+		_, err := c.IndexPools()
+		if err == nil {
+			return c
+		}
+		log.Println("Could not connect to IPAM, retrying in 5 Seconds...")
+		time.Sleep(5 * time.Second)
+	}
 
-//Reservations returns a handle to the Reservations routes
-func (c *Client) Reservations() *Reservations {
-	return &Reservations{c}
-}
-
-//Subnets returns a handle to the Subnets routes
-func (c *Client) Subnets() *Subnets {
-	return &Subnets{c}
-}
-
-//Pools returns a handle to the Pools routes
-func (c *Client) Pools() *Pools {
-	return &Pools{c}
+	return nil
 }
 
 // SendResource is used to send a generic resource type

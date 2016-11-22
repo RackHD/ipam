@@ -6,14 +6,9 @@ import (
 	"github.com/RackHD/ipam/resources"
 )
 
-//Subnets can be used to query the Subnets routes
-type Subnets struct {
-	client *Client
-}
-
-// Index returns a list of Subnets.
-func (s *Subnets) Index(poolID string) (resources.SubnetsV1, error) {
-	receivedSubnets, err := s.client.ReceiveResource("GET", "/pools/"+poolID+"/subnets", "", "")
+// IndexSubnets returns a list of Subnets.
+func (c *Client) IndexSubnets(poolID string) (resources.SubnetsV1, error) {
+	receivedSubnets, err := c.ReceiveResource("GET", "/pools/"+poolID+"/subnets", "", "")
 	if err != nil {
 		return resources.SubnetsV1{}, err
 	}
@@ -23,9 +18,9 @@ func (s *Subnets) Index(poolID string) (resources.SubnetsV1, error) {
 	return resources.SubnetsV1{}, errors.New("Subnet Index call error.")
 }
 
-// Creates a subnet and return the location.
-func (s *Subnets) Creates(poolID string, subnetToCreate resources.SubnetV1) (string, error) {
-	subnetLocation, err := s.client.SendResource("POST", "/pools/"+poolID+"/subnets", &subnetToCreate)
+// CreateSubnet a subnet and return the location.
+func (c *Client) CreateSubnet(poolID string, subnetToCreate resources.SubnetV1) (string, error) {
+	subnetLocation, err := c.SendResource("POST", "/pools/"+poolID+"/subnets", &subnetToCreate)
 	if err != nil {
 		return "", err
 	}
@@ -33,8 +28,8 @@ func (s *Subnets) Creates(poolID string, subnetToCreate resources.SubnetV1) (str
 }
 
 // CreateShowSubnet creates a subnet and then returns that subnet.
-func (s *Subnets) CreateShowSubnet(poolID string, subnetToCreate resources.SubnetV1) (resources.SubnetV1, error) {
-	receivedSubnet, err := s.client.SendReceiveResource("POST", "GET", "/pools/"+poolID+"/subnets", &subnetToCreate)
+func (c *Client) CreateShowSubnet(poolID string, subnetToCreate resources.SubnetV1) (resources.SubnetV1, error) {
+	receivedSubnet, err := c.SendReceiveResource("POST", "GET", "/pools/"+poolID+"/subnets", &subnetToCreate)
 	if err != nil {
 		return resources.SubnetV1{}, err
 	}
@@ -44,9 +39,9 @@ func (s *Subnets) CreateShowSubnet(poolID string, subnetToCreate resources.Subne
 	return resources.SubnetV1{}, errors.New("CreateShowSubnet call error.")
 }
 
-// Show returns the requested subnet.
-func (s *Subnets) Show(subnetID string, subnetToGet resources.SubnetV1) (resources.SubnetV1, error) {
-	receivedSubnet, err := s.client.ReceiveResource("GET", "/subnets/"+subnetID, subnetToGet.Type(), subnetToGet.Version())
+// ShowSubnet returns the requested subnet.
+func (c *Client) ShowSubnet(subnetID string, subnetToGet resources.SubnetV1) (resources.SubnetV1, error) {
+	receivedSubnet, err := c.ReceiveResource("GET", "/subnets/"+subnetID, subnetToGet.Type(), subnetToGet.Version())
 	if err != nil {
 		return resources.SubnetV1{}, err
 	}
@@ -56,9 +51,9 @@ func (s *Subnets) Show(subnetID string, subnetToGet resources.SubnetV1) (resourc
 	return resources.SubnetV1{}, errors.New("Subnet Show call error.")
 }
 
-// Update updates the requested subnet and returns its location.
-func (s *Subnets) Update(subnetID string, subnetToUpdate resources.SubnetV1) (string, error) {
-	subnetLocation, err := s.client.SendResource("PATCH", "/subnets/"+subnetID, &subnetToUpdate)
+// UpdateSubnet updates the requested subnet and returns its location.
+func (c *Client) UpdateSubnet(subnetID string, subnetToUpdate resources.SubnetV1) (string, error) {
+	subnetLocation, err := c.SendResource("PATCH", "/subnets/"+subnetID, &subnetToUpdate)
 	if err != nil {
 		return "", err
 	}
@@ -66,8 +61,8 @@ func (s *Subnets) Update(subnetID string, subnetToUpdate resources.SubnetV1) (st
 }
 
 // UpdateShowSubnet updates a Subnet and then returns that Subnet.
-func (s *Subnets) UpdateShowSubnet(subnetID string, subnetToUpdate resources.SubnetV1) (resources.SubnetV1, error) {
-	receivedSubnet, err := s.client.SendReceiveResource("PATCH", "GET", "/subnets/"+subnetID, &subnetToUpdate)
+func (c *Client) UpdateShowSubnet(subnetID string, subnetToUpdate resources.SubnetV1) (resources.SubnetV1, error) {
+	receivedSubnet, err := c.SendReceiveResource("PATCH", "GET", "/subnets/"+subnetID, &subnetToUpdate)
 	if err != nil {
 		return resources.SubnetV1{}, err
 	}
@@ -77,9 +72,9 @@ func (s *Subnets) UpdateShowSubnet(subnetID string, subnetToUpdate resources.Sub
 	return resources.SubnetV1{}, errors.New("UpdateShowSubnet call error.")
 }
 
-// Delete removed the requested subnet and returns the location.
-func (s *Subnets) Delete(subnetID string, subnetToDelete resources.SubnetV1) (string, error) {
-	subnetLocation, err := s.client.SendResource("DELETE", "/subnets/"+subnetID, &subnetToDelete)
+// DeleteSubnet removed the requested subnet and returns the location.
+func (c *Client) DeleteSubnet(subnetID string, subnetToDelete resources.SubnetV1) (string, error) {
+	subnetLocation, err := c.SendResource("DELETE", "/subnets/"+subnetID, &subnetToDelete)
 	if err != nil {
 		return "", err
 	}
