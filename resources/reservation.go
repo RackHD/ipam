@@ -30,7 +30,7 @@ type ReservationV1 struct {
 	Name     string      `json:"name"`
 	Tags     []string    `json:"tags"`
 	Metadata interface{} `json:"metadata"`
-	Subnet   string      `json:"subnet"`
+	Subnet   string      `json:"subnet"` //Subnet ID
 }
 
 // Type returns the resource type for use in rendering HTTP response headers.
