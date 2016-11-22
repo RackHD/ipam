@@ -31,8 +31,8 @@ type LeaseV1 struct {
 	Name        string      `json:"name"`
 	Tags        []string    `json:"tags"`
 	Metadata    interface{} `json:"metadata"`
-	Subnet      string      `json:"subnet"`
-	Reservation string      `json:"reservation"`
+	Subnet      string      `json:"subnet"`      //SubnetID
+	Reservation string      `json:"reservation"` //ReservationID
 	Address     string      `json:"address"`
 }
 
