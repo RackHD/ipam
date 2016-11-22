@@ -48,7 +48,7 @@ func (ipam *Ipam) CreateSubnet(subnet models.Subnet) error {
 	end := binary.BigEndian.Uint32(subnet.End.Data[len(subnet.End.Data)-4:])
 
 	// Iterate through the range of IP's and insert a record for each.
-	for ; start < end; start++ {
+	for ; start <= end; start++ {
 		// IP's are stored as 16 byte arrays and we're only doing IPv4 so prepend
 		// the net.IP prefix that denotes an IPv4 address.
 		prefix := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff}
