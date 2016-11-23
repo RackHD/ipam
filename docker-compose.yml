@@ -19,3 +19,4 @@ services:
       command: "-mongo ipam_mongo:27017"
       depends_on:
         - mongodb
+      dns_search: apps.cia.lss.emc.com

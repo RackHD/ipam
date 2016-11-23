@@ -19,7 +19,7 @@ deps:
 
 deps-local:
 	@if ! [ -f glide.yaml ]; then glide init --non-interactive; fi
-	@glide install --strip-vcs --strip-vendor
+	@glide install
 
 build:
 	@${DOCKER_CMD} make build-local
@@ -36,8 +36,18 @@ lint-local:
 test:
 	@${DOCKER_CMD} make test-local
 
+test-client:
+	@docker-compose build
+	@docker-compose create
+	@docker-compose start
+	@-make test-client-local
+	@docker-compose kill
+
 test-local: lint-local
-	@ginkgo -race -trace -randomizeAllSpecs -r -cover
+	@ginkgo -race -trace -randomizeAllSpecs -r -cover --skipPackage=client
+
+test-client-local:
+	@ginkgo -race -trace -randomizeAllSpecs -cover client
 
 coveralls:
 	@go get github.com/mattn/goveralls
