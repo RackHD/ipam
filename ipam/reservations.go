@@ -40,10 +40,16 @@ func (ipam *Ipam) CreateReservation(reservation models.Reservation) error {
 		return err
 	}
 
-	return session.DB(IpamDatabase).C(IpamCollectionLeases).Update(
+	err = session.DB(IpamDatabase).C(IpamCollectionLeases).Update(
 		bson.M{"reservation": nil, "subnet": reservation.Subnet},
 		bson.M{"$set": bson.M{"reservation": reservation.ID}},
 	)
+	if err != nil {
+		session.DB(IpamDatabase).C(IpamCollectionReservations).Remove(reservation)
+		return err
+	}
+
+	return nil
 }
 
 // UpdateReservation updates a Reservation.
