@@ -1,4 +1,4 @@
-package ipamapi
+package client
 
 import (
 	"bytes"
