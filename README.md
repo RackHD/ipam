@@ -2,6 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/RackHD/ipam/badge.svg?branch=master)](https://coveralls.io/github/RackHD/ipam?branch=master)
 [![GoDoc](https://godoc.org/github.com/RackHD/ipam?status.svg)](https://godoc.org/github.com/RackHD/ipam)
 
+Copyright © 2017 Dell Inc. or its subsidiaries.  All Rights Reserved. 
+
 Contribute
 ----------
 
